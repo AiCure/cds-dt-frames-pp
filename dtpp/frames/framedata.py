@@ -99,6 +99,7 @@ class FilteredFrameData(FrameData):
         fs = []
         fe = []
         v = []
+
         for index, row in data.dataframe().iterrows():
             if not datafilter.filter_at(row[data.fs], row[data.fe]):
                 fs.append(row[data.fs])

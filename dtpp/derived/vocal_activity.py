@@ -85,3 +85,9 @@ class PauseCharacteristics(FrameData):
         """
         return self.pause_max() - self.pause_min()
     
+    def pause_total(self):
+        """
+        Get the total pause time.
+        """
+        return self.pause_data()['pause_duration'].sum()
+    

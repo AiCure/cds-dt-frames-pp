@@ -2,11 +2,11 @@ from dtpp.derived.vocal_activity import PauseCharacteristics
 import glob
 import pandas as pd
 import os
+import librosa
 
 
 def process_directory(input_dir, output_dir, offset, input_type='csv', 
                       threshold = 0.5, frame_start_key = 'frame_start', frame_end_key = 'frame_end', vad_key = 'voice_probability'):
-    tmp = os.listdir(input_dir)
     if input_type == 'csv':
         files_to_process = glob.glob(f'{input_dir}/**/*.csv', recursive=True) 
     elif input_type == 'parquet':
@@ -32,3 +32,7 @@ def process_directory(input_dir, output_dir, offset, input_type='csv',
 
 if __name__ == '__main__':
     process_directory('./tests/data/vad', './tests/data/output', 0.0, input_type='parquet', vad_key='voice_probability')
+    # offset = librosa.get_duration(filename='/Users/aaronmasino/002_dev/cds-dt-frames-pp/tests/data/picture_description.mp3')
+    # input_dir = "/Users/aaronmasino/Desktop/KAR-011-300/vad"
+    # output_dir = "/Users/aaronmasino/Desktop/KAR-011-300/output"
+    # process_directory(input_dir, output_dir, offset, input_type='parquet', vad_key='voice_probability')
