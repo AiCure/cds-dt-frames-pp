@@ -17,7 +17,7 @@ class PauseCharacteristics(FrameData):
         self.threshold = threshold
 
     def pause_data(self):
-        if self.df_pause:
+        if self.df_pause is not None:
             return self.df_pause
         
         pause_start = []
@@ -27,6 +27,7 @@ class PauseCharacteristics(FrameData):
         last_frame_end = None
 
         for index, row in self.df.iterrows():
+            v = row[self.vk]
             if row[self.vk] < self.threshold:
                 last_frame_end = row[self.fe]
                 if not pause_started:
@@ -42,7 +43,6 @@ class PauseCharacteristics(FrameData):
             pause_end.append(last_frame_end)
             pause_duration.append(last_frame_end - pause_start[-1])
                 
-        
         self.df_pause = pd.DataFrame({'pause_start': pause_start, 'pause_end': pause_end, 'pause_duration': pause_duration})
         return self.df_pause
 
@@ -53,7 +53,7 @@ class PauseCharacteristics(FrameData):
         Input:
             threshold: the threshold for voice probability below which a pause is considered to have started (default 0.5)
         """
-        return len(self.pause_data())
+        return len(self.pause_data()['pause_duration'])
     
     def pause_mean(self):
         """
@@ -66,3 +66,22 @@ class PauseCharacteristics(FrameData):
         Get the standard deviation of pause durations.
         """
         return self.pause_data()['pause_duration'].std()
+    
+    def pause_min(self):
+        """
+        Get the minimum pause duration.
+        """
+        return self.pause_data()['pause_duration'].min()
+    
+    def pause_max(self):
+        """
+        Get the maximum pause duration.
+        """
+        return self.pause_data()['pause_duration'].max()
+    
+    def pause_range(self):
+        """
+        Get the range of pause durations.
+        """
+        return self.pause_max() - self.pause_min()
+    
